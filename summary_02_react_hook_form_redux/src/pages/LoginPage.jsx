@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Button from "../components/button/Button";
+import { useSelector } from "react-redux";
 
 export default function LoginPage() {
 
@@ -7,6 +8,8 @@ export default function LoginPage() {
     username: '',
     passwd: '',
   });
+
+  const userName = useSelector(state => state.username);
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -25,6 +28,7 @@ export default function LoginPage() {
     <div>
       <h1>LoginPage</h1>
       <p>Please enter your credentials</p>
+      <p>{`Hello, ${userName}`}</p>
       <form>
         <label htmlFor="username" />
         <input id="username" type="text" name="username" value={formState.username}

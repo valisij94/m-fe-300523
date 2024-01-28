@@ -3,62 +3,69 @@ import React, { useState } from "react";
 import classes from './RegisterPage.module.css';
 import Button from "../components/button/Button";
 
+import { useForm } from 'react-hook-form';
+
+import { useDispatch } from 'react-redux';
+import { addNameAction, addUserNameAction } from "../redux/userActions";
+
 export default function RegisterPage() {
 
-  const [formState, setFormState] = useState( {
-    username: '',
-    password: '',
-    name: '',
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm();
 
-  const handleLogin = async (event) => {
-    event.preventDefault();
+  const dispatch = useDispatch();
 
-    try {
-      const response = await fetch(
-        'https://jsonplaceholder.typicode.com/users',
-        {
-          method: 'POST',
-          headers: { 'Content-type': 'application/json; charset=UTF-8' },
-          body: JSON.stringify( {
-            name: formState.name,
-            username: formState.username
-          } )
-        }
-      );
+  const handleRegistration = (formData) => {
+    console.log('Form Data', formData);
 
-      if (!response.ok) {
-        throw new Error(`Something went wrong! ${response.statusText}`);
-      }
-
-      const responseData = await response.json();
-      console.log(responseData);
-    }
-    catch (error) {
-      console.log("Error" + error);
-    }
-  }
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormState( (prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
+    dispatch( addUserNameAction(formData.username) );
+    dispatch( addNameAction(formData.name) )
   }
 
   return (
     <div>
       <h1>RegisterPage</h1>
-      <form className={classes.registerForm}>
+      <form
+        className={classes.registerForm}
+        onSubmit={handleSubmit(handleRegistration)}
+      >
         <label htmlFor="username">Login</label>
-        <input id="username" type="text" name="username" value={formState.username}
-        onChange={handleInputChange}/>
+        <input
+          id="username"
+          type="text"
+          { ...register('username', {
+            required: "Please, fill username!",
+            minLength: {
+              value: 3,
+              message: 'Too short!'
+            },
+            maxLength: {
+              value: 12,
+              message: 'Too long!'
+            }
+          } ) }
+        />
+        { errors?.username &&
+          <p className={classes.errorField}>{errors.username.message}</p>
+        }
         <label htmlFor="password">Password</label>
-        <input id="password" type="password" name="password" value={formState.password} onChange={handleInputChange}/>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          { ...register('password', { required: true }) }
+        />
         <label htmlFor="name">Name</label>
-        <input id="name" type="text" name="name" value={formState.name} onChange={handleInputChange}/>
-        <Button buttonText="Register" clickHandler={handleLogin} />
+        <input
+          id="name"
+          type="text"
+          name="name"
+          { ...register('name', { required: true }) }
+        />
+        <Button buttonText="Register" />
       </form>
     </div>
   );
