@@ -4,6 +4,8 @@ import classes from './RegisterPage.module.css';
 import Button from "../components/button/Button";
 
 import { useForm } from 'react-hook-form';
+import { useDispatch } from "react-redux";
+import { setName, setUserName } from "../redux/slices/userSlice";
 
 
 export default function RegisterPage() {
@@ -14,8 +16,12 @@ export default function RegisterPage() {
     formState: { errors }
   } = useForm();
 
+  const dispatch = useDispatch();
+
   const handleRegistration = (formData) => {
     console.log('Form Data', formData);
+    dispatch(setName(formData.name));
+    dispatch(setUserName(formData.username));
   }
 
   return (
