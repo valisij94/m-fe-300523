@@ -1,18 +1,34 @@
 import React from "react";
 import PostItem from "./PostItem";
-import { useSelector } from "react-redux";
+import { postsApi } from "../../redux/slices/apiSlice";
+
+const EmptyDataStub = {
+  data: [],
+  isFetching: false,
+  errorMessage: ''
+};
 
 export default function PostsList() {
 
-  const { postsList, isFetching, errorMessage } = useSelector( state => state.posts);
+  const postResponse = postsApi.useGetPostsQuery(undefined, {
+    selectFromResult: ( response ) => {
+      const result = {
+        data: response.data || [],
+        isFetching: response.isFetching,
+        errorMessage: response.isError ? response.error.error : ''
+      }
+      return !!response ? result : EmptyDataStub
+    },
+  });
+
 
   return (
     <>
-      {isFetching ?
+      {postResponse.isFetching ?
         <p>Please wait - we are loading posts!</p> :
         <div>
           {
-            postsList.map( postData => {
+            postResponse.data.map( postData => {
               return <PostItem
                 key={postData.id}
                 title={postData.title}
@@ -23,7 +39,7 @@ export default function PostsList() {
           }
         </div>
       }
-      {errorMessage && <p>{errorMessage}</p>}
+      {postResponse.errorMessage && <p>{postResponse.errorMessage}</p>}
     </>
   );
 }
