@@ -1,6 +1,7 @@
 import React from "react";
 import PostItem from "./PostItem";
 import { postsApi } from "../../redux/slices/apiSlice";
+import { Link } from "react-router-dom";
 
 const EmptyDataStub = {
   data: [],
@@ -29,12 +30,15 @@ export default function PostsList() {
         <div>
           {
             postResponse.data.map( postData => {
-              return <PostItem
-                key={postData.id}
-                title={postData.title}
-                body={postData.body}
-                id={postData.id}
-              />
+              return (
+              <Link to={`/posts/${postData.id}`} key={postData.id}>
+                <PostItem
+                  title={postData.title}
+                  body={postData.body}
+                  id={postData.id}
+                />
+              </Link>
+              )
             })
           }
         </div>

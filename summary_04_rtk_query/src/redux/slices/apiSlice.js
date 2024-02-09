@@ -13,6 +13,4 @@ export const postsApi = createApi({
   }),
 });
 
-console.log(postsApi);
-
 export const { useGetPostsQuery, useGetPostByIdQuery } = postsApi;

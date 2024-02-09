@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import { Link, Route, Routes } from 'react-router-dom';
 import PostsPage from './pages/PostsPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/posts" element={<PostsPage />} />
+          <Route path="/posts/:postId" element={<PostDetailPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<h3>Not found</h3>} />
