@@ -1,0 +1,16 @@
+.registerForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 250px;
+  padding: 15px;
+  border: 1px solid gray;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+.errorField {
+  color: red;
+  text-decoration: underline;
+  font-size: 12px;
+}
